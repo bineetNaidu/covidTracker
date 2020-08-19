@@ -24,7 +24,51 @@ if (select.attributes !== "disabled") {
             e.preventDefault();
             let query = select.value;
             const response = states.filter((state) => state.name == query);
-            info.innerHTML = `<pre>${JSON.stringify(response, null, 2)}</pre>`;
+            showChart(response[0]);
         }
     });
 }
+
+const showChart = ({ name, cases, deaths, recoveries, active }) => {
+    const ctx = document.getElementById("myChart").getContext("2d");
+    let chart = new Chart(ctx, {
+        // The type of chart we want to create
+        type: "line",
+        fill: false,
+        // The data for our dataset
+        data: {
+            labels: ["Cases", "Deaths", "Recoveries", "Active"],
+            datasets: [
+                {
+                    label: name,
+                    pointBackgroundColor: "rgb(40,120,190)",
+                    borderColor: "rgb(128, 90, 213)",
+                    pointHitRadius: 5,
+                    pointRadius: 5,
+                    data: [cases, deaths, recoveries, active],
+                },
+            ],
+        },
+
+        // Configuration options go here
+        options: {
+            animation: {
+                duration: 0, // general animation time
+            },
+            hover: {
+                animationDuration: 0, // duration of animations when hovering an item
+            },
+            responsiveAnimationDuration: 0, // animation duration after a resize
+
+            tooltips: {
+                mode: "point",
+            },
+            legend: {
+                display: true,
+                labels: {
+                    fontColor: "rgb(0, 0, 0)",
+                },
+            },
+        },
+    });
+};
