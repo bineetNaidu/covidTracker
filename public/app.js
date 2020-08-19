@@ -1,5 +1,6 @@
 const select = document.querySelector("#stateSelect");
 const info = document.querySelector("#info");
+const infotab = document.querySelector("#info");
 
 const states = [];
 
@@ -22,15 +23,19 @@ if (select.attributes !== "disabled") {
     select.addEventListener("keypress", (e) => {
         if (e.which == 13) {
             e.preventDefault();
+            if (document.querySelector("#info > canvas"))
+                document.querySelector("#info > canvas").remove();
             let query = select.value;
             const response = states.filter((state) => state.name == query);
+            const canvas = document.createElement("canvas");
+            infotab.append(canvas);
             showChart(response[0]);
         }
     });
 }
 
 const showChart = ({ name, cases, deaths, recoveries, active }) => {
-    const ctx = document.getElementById("myChart").getContext("2d");
+    const ctx = document.querySelector("#info > canvas").getContext("2d");
     let chart = new Chart(ctx, {
         // The type of chart we want to create
         type: "line",
